@@ -3,12 +3,10 @@ from datetime import datetime
 from django.db.models import F, Count
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
 
 from theatre.models import (
     Genre, Actor, TheatreHall, Play, Performance, Reservation
@@ -195,7 +193,6 @@ class ReservationViewSet(viewsets.ModelViewSet):
     )
     serializer_class = ReservationSerializer
     pagination_class = ReservationPagination
-    permission_classes = IsAuthenticated
 
     def get_queryset(self):
         return Reservation.objects.filter(user=self.request.user)
