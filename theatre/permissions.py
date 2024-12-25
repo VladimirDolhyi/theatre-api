@@ -13,7 +13,7 @@ class IsAdminUserOrCreateOnly(permissions.BasePermission):
             return True
 
         # Allows authenticated users to make POST requests
-        if request.method == 'POST':
+        if request.method == "POST":
             return request.user.is_authenticated
 
         # Allows administrators to perform any requests (PUT, PATCH, DELETE)
