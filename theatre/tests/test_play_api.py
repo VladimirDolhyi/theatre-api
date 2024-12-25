@@ -164,6 +164,16 @@ class UnauthenticatedPlayAPITests(TestCase):
         res = self.client.get(PLAY_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
+    def test_create_play(self):
+        payload = {
+            "title": "The Departed",
+            "description": "Some description",
+        }
+
+        res = self.client.post(PLAY_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
 
 class AuthenticatedPlayAPITests(TestCase):
     def setUp(self):
@@ -276,6 +286,27 @@ class AuthenticatedPlayAPITests(TestCase):
         res = self.client.post(PLAY_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+    def test_put_play_forbidden(self):
+        payload = {
+            "title": "New movie",
+            "description": "New description",
+        }
+
+        play = sample_play()
+        url = detail_url(play.id)
+
+        res = self.client.put(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_play_not_allowed(self):
+        play = sample_play()
+        url = detail_url(play.id)
+
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class AdminMovieTests(TestCase):
